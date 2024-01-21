@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    <title>Language Translator</title>
+</head>
+<body>
+    <h1>Language Translator</h1>
+    
+    <form action="/translate" method="post">
+        <label for="input_text">Enter Text to Translate:</label>
+        <textarea name="input_text" id="input_text" rows="4" required>{{ input_text }}</textarea>
+        
+        <label for="target_language">Target Language Code:</label>
+        <input type="text" name="target_language" id="target_language" required value="{{ target_language }}">
+        
+        <button name = "text" type="submit">Translate</button>
+        <!-- <button name = "speech" type="submit">SPEECH TO TEXT</button> -->
+    </form>
+    
+    {% if translated_text %}
+        <h2>Translated Text for "<p>{{ input_text }}</p>":</h2>
+        <p>{{ translated_text }}</p>
+    {% endif %}
+    {% if audio_file %}
+        <p>Click to listen:</p>
+        <audio id="delay" controls method="get">
+            <source src="{{ url_for('static', filename = audio_file ) }}" type="audio/wav">
+            Your browser does not support the audio element.
+        </audio>
+    {% endif %}
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var audio = document.getElementById('delay');
+        function playAudioAfterDelay() {
+            if (audio.paused) {
+                audio.play();
+            }
+        }
+    setTimeout(playAudioAfterDelay, 2000);
+    });
+    </script>
+</body>
+</html>
